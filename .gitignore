@@ -1,0 +1,12 @@
+.config/bash/
+.config/htop/
+.config/nvim/plugged
+.config/procps/
+.config/pulse/
+.config/tmux/
+.config/fish/functions/*fisher*
+.config/fish/functions/*tide*
+
+*.nfs*
+*.tmp*
+*.log*
