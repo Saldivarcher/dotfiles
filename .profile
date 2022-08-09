@@ -1,7 +1,12 @@
 test -z "$PROFILEREAD" && . /etc/profile || true
 
+load_dev_env=$HOME/.local/bin/load_dev_env
+if [ -e "$load_dev_env" ] ; then
+  . "$HOME/.local/bin/load_dev_env"
+fi
+
 cargo=$HOME/.cargo
-if [ -d "cargo" ] ; then
+if [ -d "$cargo" ] ; then
   . "$HOME/.cargo/env"
 fi
 

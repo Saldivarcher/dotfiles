@@ -4,6 +4,8 @@ if status is-interactive
     set -x PATH "$HOME/.local/bin" $PATH
     set -x PATH "$HOME/bin" $PATH
 
+    set fish_greeting ''
+
     switch (uname)
         case Linux
             set -x PATH "/cray/css/compiler/cost/testing/bin" $PATH
