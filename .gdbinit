@@ -2,7 +2,7 @@ set print pretty on
 set print object on
 set print vtbl on
 
-set target-async off
+set mi-async off
 set non-stop off
 
 set history save on

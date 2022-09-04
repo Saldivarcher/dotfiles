@@ -17,6 +17,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'rhysd/vim-llvm'
 Plug 'vim-scripts/BufOnly.vim'
 Plug 'liuchengxu/vista.vim'
+Plug 'dag/vim-fish'
+Plug 'junegunn/gv.vim'
 call plug#end()
 
 set background=dark
@@ -142,6 +144,7 @@ autocmd BufWritePre *.h,*.cc,*.cpp,*.c call Formatonsave()
 " Spell check
 autocmd FileType gitcommit setlocal spell
 autocmd FileType markdown  setlocal spell
+autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 
 let g:vista#executives = ['nvim_lsp', 'ctags']
 
