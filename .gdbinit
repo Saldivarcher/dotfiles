@@ -52,3 +52,14 @@ define thread
 end
 
 add-auto-load-safe-path /
+
+source ~/.config/gdb/stl_view.gdb
+
+python
+import sys
+import os
+path_to_pretty_printer = os.path.expanduser('~/.config/gdb/python')
+sys.path.insert(0, path_to_pretty_printer)
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers(None)
+end
