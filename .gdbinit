@@ -54,6 +54,7 @@ end
 add-auto-load-safe-path /
 
 source ~/.config/gdb/stl_view.gdb
+source ~/.config/gdb/pdgcs.gdb
 
 python
 import sys

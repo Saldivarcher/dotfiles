@@ -42,6 +42,7 @@ require'lspconfig'.clangd.setup{
     "clangd",
     "-j=16",
     "--background-index",
+    "--enable-config",
   },
   capabilities = capabilities,
 }

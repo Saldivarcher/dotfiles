@@ -17,7 +17,6 @@ let g:lightline = {
     \ },
   \ 'component_function': {
       \   'gitbranch': 'FugitiveHead',
-      \   'method': 'NearestMethodOrFunction',
     \ },
 \}
 
@@ -27,16 +26,3 @@ function! FileEncoding() abort
   endif
  return (&fenc!=#""?&fenc:&enc)
 endfunction
-
-function! NearestMethodOrFunction() abort
-  let l:method = get(b:, 'vista_nearest_method_or_function', '')
-  if l:method != ''
-    let l:method = '[' . l:method . ']'
-  else
-    let l:method = "[]"
-  endif
-  return l:method
-endfunction
-
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
-

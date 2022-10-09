@@ -16,9 +16,12 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'tpope/vim-fugitive'
 Plug 'rhysd/vim-llvm'
 Plug 'vim-scripts/BufOnly.vim'
-Plug 'liuchengxu/vista.vim'
 Plug 'dag/vim-fish'
 Plug 'junegunn/gv.vim'
+Plug 'tpope/vim-dispatch'
+Plug 'chrisbra/NrrwRgn'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter-context'
 call plug#end()
 
 set background=dark
@@ -123,7 +126,6 @@ nnoremap <leader>bo :BufOnly<CR>
 " Opens a new terminal in a newtab
 nnoremap <leader>tt :tabnew<CR>:terminal<CR>
 nnoremap <leader>ot :terminal<CR>
-nnoremap <leader>fs :Vista finder<CR>
 
 " close a quickfix window
 nnoremap <leader>cw :ccl<CR>
@@ -131,13 +133,13 @@ nnoremap <leader>cw :ccl<CR>
 " Unhighlights search results
 nnoremap <leader><space> :noh<cr>
 nnoremap <leader>dw :TrimWhitespace<cr>
-
 nnoremap <F7> :Dispatch!<CR>
+nnoremap <leader>rg :RG<CR>
 
 function! Formatonsave()
   " Only format the diff.
   let l:formatdiff = 1
-  "py3f /cray/css/users/saldivar/.local/share/clang/clang-format.py
+  py3f ~/.local/share/clang/clang-format.py
 endfunction
 autocmd BufWritePre *.h,*.cc,*.cpp,*.c call Formatonsave()
 
@@ -146,23 +148,7 @@ autocmd FileType gitcommit setlocal spell
 autocmd FileType markdown  setlocal spell
 autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 
-let g:vista#executives = ['nvim_lsp', 'ctags']
-
-let g:vista_executive_for = {
-\  "cpp" : "nvim_lsp",
-\  "c" : "nvim_lsp"
-\  }
-
-" Size of code box within fzf search window
-let g:vista_fzf_preview = ['right:50%']
-" Add items coc doesn't work for here
-let g:vista_close_on_jump = 1
-let g:vista_sidebar_width = 70
-
 source  ~/.config/nvim/lightline.vim
 source  ~/.config/nvim/fzf.vim
 luafile ~/.config/nvim/lua/lsp.lua
-
-
-nnoremap <leader>rg :RG<CR>
-
+luafile ~/.config/nvim/lua/context.lua
