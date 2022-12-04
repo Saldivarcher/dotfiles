@@ -76,11 +76,6 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 " Lowers brightness on matching brackets
 hi MatchParen cterm=bold ctermbg=none ctermfg=magenta
 
-function! ReloadSleuth()
-  Sleuth
-  call LightlineReload()
-endfunction
-
 fun! TrimWhitespace()
     let l:save = winsaveview()
     keeppatterns %s/\s\+$//e
@@ -88,7 +83,6 @@ fun! TrimWhitespace()
 endfun
 
 command! TrimWhitespace call TrimWhitespace()
-command! ReloadSleuth call ReloadSleuth()
 
 " If in insert mode, help cannot be called
 inoremap <F1> <Esc>
@@ -133,7 +127,7 @@ nnoremap <leader>rg :RG<CR>
 function! Formatonsave()
   " Only format the diff.
   let l:formatdiff = 1
-  "py3f ~/.local/share/clang/clang-format.py
+  py3f ~/.local/share/clang/clang-format.py
 endfunction
 autocmd BufWritePre *.h,*.cc,*.cpp,*.c call Formatonsave()
 
