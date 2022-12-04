@@ -1,7 +1,7 @@
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('~/.local/share/nvim/site/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'itchyny/lightline.vim'
+Plug 'nvim-lualine/lualine.nvim'
 Plug 'jremmen/vim-ripgrep'
 Plug 'justinmk/vim-syntax-extra'
 Plug 'gruvbox-community/gruvbox'
@@ -76,12 +76,6 @@ set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 " Lowers brightness on matching brackets
 hi MatchParen cterm=bold ctermbg=none ctermfg=magenta
 
-function! LightlineReload()
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
-endfunction
-
 function! ReloadSleuth()
   Sleuth
   call LightlineReload()
@@ -139,7 +133,7 @@ nnoremap <leader>rg :RG<CR>
 function! Formatonsave()
   " Only format the diff.
   let l:formatdiff = 1
-  py3f ~/.local/share/clang/clang-format.py
+  "py3f ~/.local/share/clang/clang-format.py
 endfunction
 autocmd BufWritePre *.h,*.cc,*.cpp,*.c call Formatonsave()
 
@@ -148,7 +142,8 @@ autocmd FileType gitcommit setlocal spell
 autocmd FileType markdown  setlocal spell
 autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 
-source  ~/.config/nvim/lightline.vim
+
 source  ~/.config/nvim/fzf.vim
 luafile ~/.config/nvim/lua/lsp.lua
 luafile ~/.config/nvim/lua/context.lua
+luafile ~/.config/nvim/lua/tab.lua
