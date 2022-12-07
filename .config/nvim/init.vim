@@ -22,6 +22,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'chrisbra/NrrwRgn'
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/nvim-treesitter-context'
+Plug 'vimwiki/vimwiki'
 call plug#end()
 
 set background=dark
@@ -134,8 +135,14 @@ autocmd BufWritePre *.h,*.cc,*.cpp,*.c call Formatonsave()
 " Spell check
 autocmd FileType gitcommit setlocal spell
 autocmd FileType markdown  setlocal spell
+autocmd FileType vimwiki  setlocal spell
 autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 
+let wiki = {}
+let wiki.path = '~/vimwiki/'
+let wiki.automatic_nested_syntaxes = 1
+let g:vimwiki_list = [wiki]
+let g:vimwiki_folding='syntax'
 
 source  ~/.config/nvim/fzf.vim
 luafile ~/.config/nvim/lua/lsp.lua
