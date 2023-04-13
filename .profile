@@ -27,3 +27,5 @@ case $- in
       export SHELL="$fish"
     fi
 esac
+
+if [ -e /home/users/saldivar/.nix-profile/etc/profile.d/nix.sh ]; then . /home/users/saldivar/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

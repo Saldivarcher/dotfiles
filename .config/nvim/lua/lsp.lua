@@ -52,7 +52,7 @@ require'lspconfig'.fortls.setup{
   cmd = {
     'fortls',
     '--autocomplete_name_only',
-    '--incrmental_sync',
+    '--incremental_sync',
     '--lowercase_intrinsics',
   },
   settings = {
@@ -70,6 +70,13 @@ require'lspconfig'.pylsp.setup{
   cmd = {
     "pylsp",
     "--check-parent-process",
+  },
+  settings = {
+    pylsp = {
+      plugins = {
+        yapf = { enabled = true },
+      },
+    },
   },
   capabilities = capabilities,
 }

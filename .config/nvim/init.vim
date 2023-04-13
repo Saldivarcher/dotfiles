@@ -4,7 +4,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'jremmen/vim-ripgrep'
 Plug 'justinmk/vim-syntax-extra'
-Plug 'gruvbox-community/gruvbox'
+Plug 'ellisonleao/gruvbox.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'tpope/vim-sleuth'
 Plug 'airblade/vim-gitgutter'
@@ -24,14 +24,10 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/nvim-treesitter-context'
 call plug#end()
 
-set background=dark
 set t_Co=256
 set nocompatible
 
 set encoding=UTF-8
-
-colorscheme gruvbox
-let g:gruvbox_contrast_dark="hard"
 
 syntax on
 set number
@@ -141,3 +137,4 @@ source  ~/.config/nvim/fzf.vim
 luafile ~/.config/nvim/lua/lsp.lua
 luafile ~/.config/nvim/lua/context.lua
 luafile ~/.config/nvim/lua/tab.lua
+luafile ~/.config/nvim/lua/colorscheme.lua

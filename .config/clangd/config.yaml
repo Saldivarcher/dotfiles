@@ -1,0 +1,8 @@
+CompileFlags:
+  Add: [
+  -isystem/usr/lib64/gcc/x86_64-suse-linux/9/../../../../include/c++/7/,
+  -isystem/usr/lib64/gcc/x86_64-suse-linux/9/../../../../include/c++/7/x86_64-suse-linux/,
+  ]
+Diagnostics:
+  ClangTidy:
+    Remove: readability-identifier-naming
