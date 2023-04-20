@@ -63,3 +63,4 @@ set __fish_git_prompt_color_dirtystate 'red'
 set __fish_git_prompt_color_upstream_ahead ffb90f
 set __fish_git_prompt_color_upstream_behind blue
 
+set -gx PATH "$HOME/.cargo/bin" $PATH
