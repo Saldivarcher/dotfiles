@@ -6,6 +6,7 @@
 .config/filezilla/
 .config/fish/functions/*fisher*
 .config/fish/functions/*tide*
+.config/.config/gdb/python/libstdcxx
 
 *.nfs*
 *.tmp*
