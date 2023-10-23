@@ -43,6 +43,7 @@ require'lspconfig'.clangd.setup{
     "-j=16",
     "--background-index",
     "--enable-config",
+    "--query-driver=/opt/gcc/12.1.0/bin/g++,/opt/gcc/10.3.0/bin/g++",
   },
   capabilities = capabilities,
 }
@@ -147,7 +148,8 @@ cmp.setup {
     end,
   },
   sources = {
-    { name = 'nvim_lsp' }
+    { name = 'nvim_lsp' },
+    { name = 'path' },
   }
 }
 

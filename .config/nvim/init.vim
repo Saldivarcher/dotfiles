@@ -23,6 +23,7 @@ Plug 'chrisbra/NrrwRgn'
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'vimwiki/vimwiki'
+Plug 'tpope/vim-obsession'
 call plug#end()
 
 set t_Co=256
@@ -121,10 +122,17 @@ nnoremap <leader>dw :TrimWhitespace<cr>
 nnoremap <F7> :Dispatch!<CR>
 nnoremap <leader>rg :RG<CR>
 
+let g:RunClangFormat = 1
 function! Formatonsave()
   " Only format the diff.
   let l:formatdiff = 1
-  py3f /usr/share/clang/clang-format.py
+  if g:RunClangFormat
+    if !empty(expand(glob("/usr/share/clang/clang-format.py")))
+      py3f /usr/share/clang/clang-format.py
+    else
+      py3f ~/.local/share/clang/clang-format.py
+    endif
+  endif
 endfunction
 autocmd BufWritePre *.h,*.cc,*.cpp,*.c call Formatonsave()
 
