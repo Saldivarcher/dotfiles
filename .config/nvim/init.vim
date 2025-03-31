@@ -168,12 +168,6 @@ autocmd FileType markdown  setlocal spell
 autocmd FileType vimwiki  setlocal spell
 autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 
-let wiki = {}
-let wiki.path = '~/vimwiki/'
-let wiki.automatic_nested_syntaxes = 1
-let g:vimwiki_list = [wiki]
-let g:vimwiki_folding='syntax'
-
 let fortran_have_tabs=1
 
 source  ~/.config/nvim/fzf.vim

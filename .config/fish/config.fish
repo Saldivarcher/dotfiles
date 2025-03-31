@@ -16,6 +16,7 @@ switch (uname)
         set -x PATH "/hpcdc/project/compiler/cost/testing/bin/" $PATH
     case Darwin
         set -x PATH "/Users/migsaldivar/Library/Python/3.9/bin" $PATH
+        set -x PATH "/Users/migsaldivar/Library/Python/3.11/bin" $PATH
 end
 
 switch (uname -m)
