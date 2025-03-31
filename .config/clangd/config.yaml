@@ -1,6 +1,10 @@
 CompileFlags:
   Add: [
   -isystem/usr/lib64/gcc/x86_64-suse-linux/9/../../../../include/c++/7/,
+  -isystem/usr/lib64/gcc/x86_64-suse-linux/9/../../../include/c++/7/,
+  -isystem/usr/lib64/gcc/x86_64-suse-linux/7/../../../include/c++/7/,
+  -isystem/opt/cray/pe//gcc/12.2.0/snos/include/g++/,
+  -isystem/usr/include/c++/7/,
   -isystem/usr/lib64/gcc/x86_64-suse-linux/9/../../../../include/c++/7/x86_64-suse-linux/,
   ]
 Diagnostics:

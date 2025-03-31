@@ -29,3 +29,7 @@ case $- in
 esac
 
 if [ -e /home/users/saldivar/.nix-profile/etc/profile.d/nix.sh ]; then . /home/users/saldivar/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+# This is needed for nix, it uses these certs to install packages.
+export SSL_CERT_FILE=/etc/ssl/ca-bundle.pem
+export NIX_SSL_CERT_FILE=/etc/ssl/ca-bundle.pem

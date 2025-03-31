@@ -1,13 +1,19 @@
 source $HOME/.config/fish/alias.fish
+
 set -x PATH "$HOME/.local/bin" $PATH
 set -x PATH "$HOME/bin" $PATH
 set -x PATH "$HOME/.local/share/junest/bin" $PATH
+
+set current_hostname (hostname)
+if  string match -q "*pinoak*" $current_hostname
+    set -x PATH "$HOME/css/opt/x86/nvim-root/usr/bin/" $PATH
+end
 
 set fish_greeting ''
 
 switch (uname)
     case Linux
-        set -x PATH "/cray/css/compiler/cost/testing/bin" $PATH
+        set -x PATH "/hpcdc/project/compiler/cost/testing/bin/" $PATH
     case Darwin
         set -x PATH "/Users/migsaldivar/Library/Python/3.9/bin" $PATH
 end
@@ -18,6 +24,9 @@ switch (uname -m)
     case x86_64
         set -x NIX '/cray/css/users/saldivar/opt/x86/nix'
 end
+
+set -x NIX_STORE $NIX/store
+set -x NIX_DATA_DIR $HOME/.local/share
 
 set -g async_prompt_functions _pure_prompt_git  # run this async! dope.
 # I don't need a prompt symbol for you-got-things-in-yr-stash

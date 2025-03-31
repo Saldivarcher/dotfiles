@@ -43,7 +43,7 @@ require'lspconfig'.clangd.setup{
     "-j=16",
     "--background-index",
     "--enable-config",
-    "--query-driver=/opt/gcc/12.1.0/bin/g++,/opt/gcc/10.3.0/bin/g++",
+    "--query-driver=/usr/bin/g++-12",
   },
   capabilities = capabilities,
 }

@@ -24,6 +24,7 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'vimwiki/vimwiki'
 Plug 'tpope/vim-obsession'
+Plug 'liuchengxu/vista.vim'
 call plug#end()
 
 set t_Co=256
@@ -80,6 +81,29 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+
+" If you want to show the nearest function in your statusline automatically,
+" you can add the following line to your vimrc
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+" How each level is indented and what to prepend.
+" This could make the display more compact or more spacious.
+" e.g., more compact: ["▸ ", ""]
+" Note: this option only works for the kind renderer, not the tree renderer.
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+
+" Executive used when opening vista sidebar without specifying it.
+" See all the avaliable executives via `:echo g:vista#executives`.
+let g:vista_default_executive = 'nvim_lsp'
+
+" To enable fzf's preview window set g:vista_fzf_preview.
+" The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
+" For example:
+let g:vista_fzf_preview = ['up:50%:wrap']
+
 command! TrimWhitespace call TrimWhitespace()
 
 " If in insert mode, help cannot be called
@@ -100,7 +124,7 @@ nnoremap <leader>cj :clearjumps<CR>
 nnoremap <leader>rr :FZF<CR>
 nnoremap <leader>bs :set scrollback=1<CR>
 nnoremap <leader>bd :set scrollback=100000<CR>
-nnoremap <leader>rs :ReloadSleuth<CR>
+nnoremap <leader>rs :Sleuth<CR>
 " Go back to previous open file
 nnoremap <leader>gb :e#<CR>
 " Show buffers in fzf
@@ -115,11 +139,13 @@ nnoremap <leader>ot :terminal<CR>
 
 " close a quickfix window
 nnoremap <leader>cw :ccl<CR>
+nnoremap <leader>ts :TSContextToggle<CR>
 
 " Unhighlights search results
 nnoremap <leader><space> :noh<cr>
 nnoremap <leader>dw :TrimWhitespace<cr>
 nnoremap <F7> :Dispatch!<CR>
+nnoremap <F8> :Vista finder<CR>
 nnoremap <leader>rg :RG<CR>
 
 let g:RunClangFormat = 1
@@ -147,6 +173,8 @@ let wiki.path = '~/vimwiki/'
 let wiki.automatic_nested_syntaxes = 1
 let g:vimwiki_list = [wiki]
 let g:vimwiki_folding='syntax'
+
+let fortran_have_tabs=1
 
 source  ~/.config/nvim/fzf.vim
 luafile ~/.config/nvim/lua/lsp.lua
