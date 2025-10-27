@@ -1,157 +1,179 @@
-local nvim_lsp = require('lspconfig')
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
+-- Modern on_attach function using vim.keymap.set for buffer-local mappings
 local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
   if client.server_capabilities.documentHighlightProvider then
-    vim.cmd [[
-      augroup lsp_document_highlight
-        autocmd! * <buffer>
-        autocmd! CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd! CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]]
+    local group = vim.api.nvim_create_augroup("LspDocumentHighlight", { clear = true })
+    vim.api.nvim_create_autocmd("CursorHold", {
+      group = group,
+      buffer = bufnr,
+      callback = vim.lsp.buf.document_highlight,
+    })
+    vim.api.nvim_create_autocmd("CursorMoved", {
+      group = group,
+      buffer = bufnr,
+      callback = vim.lsp.buf.clear_references,
+    })
   end
 
-  -- Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-  -- Mappings.
-  local opts = { noremap=true, silent=true }
-
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', '<leader>gc', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', '<leader>gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', '<leader>gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<leader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-
+  local opts = { noremap = true, silent = true, buffer = bufnr }
+  vim.keymap.set('n', '<leader>gc', vim.lsp.buf.declaration, opts)
+  vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, opts)
+  vim.keymap.set('n', '<leader>gh', vim.lsp.buf.hover, opts)
+  vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, opts)
+  vim.keymap.set('n', '<leader>gt', vim.lsp.buf.type_definition, opts)
+  vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, opts)
 end
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require('cmp_nvim_lsp').default_capabilities(
+  vim.lsp.protocol.make_client_capabilities()
+)
 
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-require'lspconfig'.clangd.setup{
-  on_attach = on_attach,
-  cmd = {
-    "clangd",
-    "-j=16",
-    "--background-index",
-    "--enable-config",
-    "--query-driver=/usr/bin/g++-12",
-  },
-  capabilities = capabilities,
-}
-
-require'lspconfig'.fortls.setup{
-  on_attach = on_attach,
-  cmd = {
-    'fortls',
-    '--autocomplete_name_only',
-    '--incremental_sync',
-    '--lowercase_intrinsics',
-  },
-  settings = {
-    ["fortran-ls"] = {
-        variableHover = false,
-        nthreads = 8,
-
-    },
-  },
-  capabilities = capabilities,
-}
-
-require'lspconfig'.pylsp.setup{
-  on_attach = on_attach,
-  cmd = {
-    "pylsp",
-    "--check-parent-process",
-  },
-  settings = {
-    pylsp = {
-      plugins = {
-        yapf = { enabled = true },
+-- clangd for C/C++
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "c", "cpp", "objc", "objcpp", "cc" },
+  callback = function()
+    vim.lsp.start({
+      name = "clangd",
+      cmd = {
+        "clangd",
+        "-j=32",
+        "--background-index",
+        "--enable-config",
+        "--query-driver=/usr/bin/g++-12",
       },
-    },
-  },
-  capabilities = capabilities,
-}
+      root_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
+  end,
+})
 
-require'lspconfig'.rust_analyzer.setup{
-  on_attach = on_attach,
-  settings = {
-    ['rust-analyzer'] = {
-      diagnostics = {
-        enable = false;
-      }
-    }
-  },
-  capabilities = capabilities,
-}
+-- fortls for Fortran
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "fortran" },
+  callback = function()
+    vim.lsp.start({
+      name = "fortls",
+      cmd = {
+        'fortls',
+        '--autocomplete_name_only',
+        '--incremental_sync',
+        '--lowercase_intrinsics',
+        '--notify_init',
+      },
+      root_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        ["fortran-ls"] = {
+          variableHover = false,
+          nthreads = 8,
+        },
+      },
+    })
+  end,
+})
 
+-- pylsp for Python
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "python" },
+  callback = function()
+    vim.lsp.start({
+      name = "pylsp",
+      cmd = { "pylsp", "--check-parent-process" },
+      root_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        pylsp = {
+          plugins = {
+            yapf = { enabled = true },
+          },
+        },
+      },
+    })
+  end,
+})
+
+-- rust-analyzer for Rust
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "rust" },
+  callback = function()
+    vim.lsp.start({
+      name = "rust_analyzer",
+      cmd = { "rust-analyzer" },
+      root_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        ["rust-analyzer"] = {
+          diagnostics = {
+            enable = false,
+          },
+        },
+      },
+    })
+  end,
+})
+
+-- nvim-cmp, luasnip, lspkind config (unchanged)
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
 end
 
+local luasnip = require 'luasnip'
 local cmp = require 'cmp'
 cmp.setup {
-  mapping = {
-    ['<C-Space>'] = cmp.mapping.confirm {
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Insert,
       select = true,
     },
-    ['<Tab>'] = function(fallback)
-      if not cmp.select_next_item() then
-        if vim.bo.buftype ~= 'prompt' and has_words_before() then
-          cmp.complete()
-        else
-          fallback()
-        end
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
       end
-    end,
-    ['<S-Tab>'] = function(fallback)
-      if not cmp.select_prev_item() then
-        if vim.bo.buftype ~= 'prompt' and has_words_before() then
-          cmp.complete()
-        else
-          fallback()
-        end
-      end
-    end,
-  },
-  snippet = {
-    -- We recommend using *actual* snippet engine.
-    -- It's a simple implementation so it might not work in some of the cases.
-    expand = function(args)
-      local line_num, col = unpack(vim.api.nvim_win_get_cursor(0))
-      local line_text = vim.api.nvim_buf_get_lines(0, line_num - 1, line_num, true)[1]
-      local indent = string.match(line_text, '^%s*')
-      local replace = vim.split(args.body, '\n', true)
-      local surround = string.match(line_text, '%S.*') or ''
-      local surround_end = surround:sub(col)
+    end, { 'i', 's' }),
 
-      replace[1] = surround:sub(0, col - 1)..replace[1]
-      replace[#replace] = replace[#replace]..(#surround_end > 1 and ' ' or '')..surround_end
-      if indent ~= '' then
-        for i, line in ipairs(replace) do
-          replace[i] = indent..line
-        end
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
       end
-
-      vim.api.nvim_buf_set_lines(0, line_num - 1, line_num, true, replace)
-    end,
-  },
+    end, { 'i', 's' }),
+  }),
   sources = {
     { name = 'nvim_lsp' },
+    { name = 'luasnip' },
     { name = 'path' },
+    { name = 'copilot' },
   }
 }
+
+local lspkind = require("lspkind")
+lspkind.init({
+  symbol_map = {
+    Copilot = "",
+  },
+})
+
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
 
 -- Show line diagnostics automatically in hover window
 vim.o.updatetime = 250

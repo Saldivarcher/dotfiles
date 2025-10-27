@@ -1,12 +1,18 @@
 source $HOME/.config/fish/alias.fish
 
-set -x PATH "$HOME/.local/bin" $PATH
-set -x PATH "$HOME/bin" $PATH
-set -x PATH "$HOME/.local/share/junest/bin" $PATH
+function add_to_path
+    if not contains $argv[1] $PATH
+        set -gx PATH $argv[1] $PATH
+    end
+end
+
+add_to_path "$HOME/.local/bin"
+add_to_path "$HOME/bin" $PATH
+add_to_path "$HOME/.local/share/junest/bin"
 
 set current_hostname (hostname)
 if  string match -q "*pinoak*" $current_hostname
-    set -x PATH "$HOME/css/opt/x86/nvim-root/usr/bin/" $PATH
+    add_to_path "$HOME/css/opt/x86/nvim-root/usr/bin/"
 end
 
 set fish_greeting ''

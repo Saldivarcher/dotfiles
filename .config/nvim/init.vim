@@ -1,6 +1,6 @@
 call plug#begin('~/.local/share/nvim/site/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'ibhagwan/fzf-lua'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'jremmen/vim-ripgrep'
 Plug 'justinmk/vim-syntax-extra'
@@ -12,6 +12,7 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
+Plug 'zbirenbaum/copilot-cmp'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'tpope/vim-fugitive'
 Plug 'rhysd/vim-llvm'
@@ -24,13 +25,19 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/nvim-treesitter-context'
 Plug 'vimwiki/vimwiki'
 Plug 'tpope/vim-obsession'
-Plug 'liuchengxu/vista.vim'
+"Plug 'liuchengxu/vista.vim'
+Plug 'folke/flash.nvim'
+Plug 'ggandor/leap.nvim'
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v2.*', 'do': 'make install_jsregexp CC=gcc-12'} " Replace <CurrentMajor> by the latest released major (first number of latest release)
+Plug 'CopilotC-Nvim/CopilotChat.nvim', {'branch': 'main'}
+Plug 'nvim-lua/plenary.nvim'
+Plug 'zbirenbaum/copilot.lua'
+Plug 'onsails/lspkind.nvim'
+Plug 'rust-lang/rust.vim'
+"Plug 'github/copilot.vim'
 call plug#end()
 
-set t_Co=256
-set nocompatible
-
-set encoding=UTF-8
+set termguicolors
 
 syntax on
 set number
@@ -50,8 +57,7 @@ set mouse=a
 set ffs=unix,dos,mac
 set updatetime=300
 
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 
 set autoread
 set nobackup
@@ -63,8 +69,6 @@ set whichwrap+=<,>,h,l
 set showmatch
 set mat=2
 set hidden
-" Make vim command bar a bit bigger
-set cmdheight=2
 set shortmess+=c
 
 " Blinking cursor, although doesn't have an effect on alacritty
@@ -87,7 +91,7 @@ endfunction
 
 " If you want to show the nearest function in your statusline automatically,
 " you can add the following line to your vimrc
-autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+"autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 " How each level is indented and what to prepend.
 " This could make the display more compact or more spacious.
@@ -132,14 +136,14 @@ nnoremap <leader>sb :Buffers<CR>
 " Show marks in fzf
 nnoremap <leader>sm :Marks<CR>
 " Closes all but the current buffer
-nnoremap <leader>bo :BufOnly<CR>
+nnoremap <leader>db :BufOnly<CR>
 " Opens a new terminal in a newtab
 nnoremap <leader>tt :tabnew<CR>:terminal<CR>
 nnoremap <leader>ot :terminal<CR>
 
 " close a quickfix window
 nnoremap <leader>cw :ccl<CR>
-nnoremap <leader>ts :TSContextToggle<CR>
+nnoremap <leader>ts :TSContext toggle<CR>
 
 " Unhighlights search results
 nnoremap <leader><space> :noh<cr>
@@ -162,6 +166,8 @@ function! Formatonsave()
 endfunction
 autocmd BufWritePre *.h,*.cc,*.cpp,*.c call Formatonsave()
 
+autocmd BufWritePre *.rs RustFmt
+
 " Spell check
 autocmd FileType gitcommit setlocal spell
 autocmd FileType markdown  setlocal spell
@@ -171,7 +177,10 @@ autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 let fortran_have_tabs=1
 
 source  ~/.config/nvim/fzf.vim
+luafile ~/.config/nvim/lua/my-fzf.lua
 luafile ~/.config/nvim/lua/lsp.lua
 luafile ~/.config/nvim/lua/context.lua
 luafile ~/.config/nvim/lua/tab.lua
 luafile ~/.config/nvim/lua/colorscheme.lua
+luafile ~/.config/nvim/lua/motion.lua
+luafile ~/.config/nvim/lua/my-copilot.lua
