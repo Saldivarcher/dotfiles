@@ -37,10 +37,10 @@ vim.api.nvim_create_autocmd("FileType", {
       name = "clangd",
       cmd = {
         "clangd",
-        "-j=32",
+        "-j=4",
         "--background-index",
         "--enable-config",
-        "--query-driver=/usr/bin/g++-12",
+        "--query-driver=/usr/bin/clang++",
       },
       root_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
       on_attach = on_attach,
