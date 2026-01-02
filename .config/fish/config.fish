@@ -21,8 +21,12 @@ switch (uname)
     case Linux
         set -x PATH "/hpcdc/project/compiler/cost/testing/bin/" $PATH
     case Darwin
-        set -x PATH "/Users/migsaldivar/Library/Python/3.9/bin" $PATH
-        set -x PATH "/Users/migsaldivar/Library/Python/3.11/bin" $PATH
+        set -x PATH "/opt/homebrew/opt/llvm@20/bin" $PATH
+        set -x PATH "/opt/homebrew/opt/python@3.13/bin/" $PATH
+        set -gx LDFLAGS "-L/opt/homebrew/opt/lld@20/lib"
+        set -gx CPPFLAGS "-I/opt/homebrew/opt/lld@20/include"
+        set -gx LDFLAGS "-L/opt/homebrew/opt/lld@20/lib"
+        set -gx CPPFLAGS "-I/opt/homebrew/opt/lld@20/include"
 end
 
 switch (uname -m)
@@ -80,3 +84,7 @@ set __fish_git_prompt_color_upstream_ahead ffb90f
 set __fish_git_prompt_color_upstream_behind blue
 
 set -gx PATH "$HOME/.cargo/bin" $PATH
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init2.fish 2>/dev/null || :

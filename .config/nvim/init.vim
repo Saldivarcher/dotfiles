@@ -156,7 +156,7 @@ let g:RunClangFormat = 1
 function! Formatonsave()
   " Only format the diff.
   let l:formatdiff = 1
-  py3f /usr/share/clang/clang-format.py
+  py3f /opt/homebrew/opt/llvm@20/share/clang/clang-format.py
 endfunction
 autocmd BufWritePre *.h,*.cc,*.cpp,*.c call Formatonsave()
 
